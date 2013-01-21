@@ -19,4 +19,9 @@ libraryDependencies ++= Seq(
   "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
 )
 
+libraryDependencies += "com.google.guava" % "guava" % "13.0.1"
+
+libraryDependencies += "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4"
+
+
 port in container.Configuration := 8081
