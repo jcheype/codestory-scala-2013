@@ -7,7 +7,7 @@ import javax.servlet.ServletContext
  * filters. It's also a good place to put initialization code which needs to
  * run at application start (e.g. database configurations), and init params.
  */
-class Scalatra extends LifeCycle {
+class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
 
     // Mount one or more servlets

@@ -2,7 +2,7 @@ package com.jcheype.codeStory.enonce1
 
 import collection.mutable
 import org.slf4j.{Logger, LoggerFactory}
-import com.jcheype.codeStory.enonce1.FOO
+import collection.immutable.HashSet
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,28 +12,31 @@ import com.jcheype.codeStory.enonce1.FOO
  * To change this template use File | Settings | File Templates.
  */
 object Decomposer {
-  val logger = LoggerFactory.getLogger("Decomposer")
+  val logger = LoggerFactory.getLogger(Decomposer.getClass)
 
-  val decompositionMap:mutable.Map[Int, mutable.Set[FooBar]] = mutable.HashMap()
+  val decompositionMap:mutable.Map[Int, Set[FooBar]] = mutable.HashMap()
 
-//  Decomposer(int to) {
-//    decompositionMap.put(0, Collections.EMPTY_SET);
-//
-//    for(int i=1; i<to+1; i++){
-//      Set<FooBar> decomposeList = new HashSet<FooBar>();
-//      for(Piece p : Piece.values()){
-//        decomposeList.addAll(getDecomposeList(i, p, decompositionMap));
-//      }
-//      decompositionMap.put(i, decomposeList);
-//    }
-//  }
+  init(100)
+
+  def init(max:Int) {
+    decompositionMap.put(0, Set[FooBar]());
+
+    for(i <- 1 to max){
+      var decomposeList:Set[FooBar]  = HashSet[FooBar]();
+      for(p <- List(FOO, BAR, QIX, BAZ)){
+        decomposeList = decomposeList ++ (getDecomposeList(i, p));
+      }
+      decompositionMap.put(i, decomposeList);
+    }
+  }
 
   def getDecomposeList(value:Int, piece:Piece):Set[FooBar] = {
-    //logger.debug(String.format("value[%s] piece[%s]", value, piece));
+    logger.trace("value["+ value +"] piece[" + piece + "]")
+
     if(value < piece.value)
       return Set()
 
-    val result = new mutable.HashSet[FooBar]()
+    val result = mutable.HashSet[FooBar]()
 
     if(value == piece.value){
       val fooBar = FooBar.build(piece)
@@ -42,6 +45,8 @@ object Decomposer {
 
     decompositionMap(value - piece.value).foreach(foobar => result.add(FooBar.build(foobar,piece)))
     result.toSet
+
+
   }
 
   object FooBar {
@@ -58,5 +63,9 @@ object Decomposer {
       }
     }
   }
-  class FooBar(val foo:Int, val bar:Int, val qix:Int, val baz:Int )
+  case class FooBar (val foo:Int, val bar:Int, val qix:Int, val baz:Int )
+
+
+
+
 }

@@ -1,5 +1,7 @@
 package com.jcheype.codeStory
 
+import enonce1.Decomposer.FooBar
+import enonce1.{FooBarSerializer, Decomposer}
 import org.scalatra._
 import scalate.ScalateSupport
 import org.slf4j.LoggerFactory
@@ -8,9 +10,18 @@ import java.io.File
 import java.nio.charset.Charset
 import com.petebevin.markdown.MarkdownProcessor
 import xml.Unparsed
+import org.json4s.{DefaultFormats, Formats}
+import org.scalatra.json._
+import com.fasterxml.jackson.databind.module.SimpleModule
+import org.mvel2.MVEL._
 
-class CodeStoryServlet extends ScalatraServlet with ScalateSupport {
-  def logger = LoggerFactory.getLogger("CodeStoryServlet")
+class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJsonSupport{
+  def logger = LoggerFactory.getLogger(classOf[CodeStoryServlet])
+  protected implicit val jsonFormats: Formats = DefaultFormats
+
+  val module = new SimpleModule("CodeStory")
+  module.addSerializer(classOf[FooBar], new FooBarSerializer())
+  mapper.registerModule(module)
 
   val queries = Map(
     "Quelle est ton adresse email" -> "cheype@gmail.com",
@@ -26,38 +37,48 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport {
 
 
   get("/") {
-    params.get("q") match {
-      case Some(q) => queries(q).orElse(halt(400))
+    <html><body>CodeStory 2013</body></html>
+  }
 
-      case None => <html><body>CodeStory 2013</body></html>
+//  def calc(s: String): Int = {
+//    Integer result = (Double) eval(s);
+//  }
+
+  get("/", params.contains("q")) {
+    val q: String = params("q")
+    queries.get(q) match {
+      case Some(reply) => reply
+      case None => calc(q)
     }
   }
 
   post("/enonce/:id") {
     val id:Int = params.getOrElse("id", halt(400)).toInt
     logger.debug("Enonce: " + id)
-
     val file: File = new File("enonce" + id + ".md")
-
     logger.debug("Enonce: " + file.getAbsolutePath)
-
     Files.write(request.body, file, Charset.forName("UTF-8"))
 
-    halt(201)
+    Ok(201)
   }
 
   get("/enonce/:id"){
     val id:Int = params.getOrElse("id", halt(400)).toInt
-
-
     val m:MarkdownProcessor = new MarkdownProcessor()
-
     val file: File = new File("enonce" + id + ".md")
-
-
     val content = m.markdown(Files.toString(file, Charset.forName("UTF-8")))
-
     <html><body>{Unparsed(content)}</body></html>
+  }
+
+  get("/scalaskel/change/:value"){
+    contentType = formats("json")
+    val value:Int = params.getOrElse("value", halt(400)).toInt
+    val result = Decomposer.decompositionMap.get(value)
+
+    result match {
+      case Some(fooBarSet) => mapper.writeValueAsString(fooBarSet.toArray)
+      case None => 400
+    }
   }
 
   notFound {
