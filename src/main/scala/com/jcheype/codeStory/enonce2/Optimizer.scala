@@ -40,8 +40,8 @@ object Optimizer {
     var last = emptyPath
 
     for (i <- maxTime to 0 by -1) {
-      val takeWhile = volList.takeWhile(_.depart == i)
-      volList = volList.takeRight(volList.length-takeWhile.length)
+      val (takeWhile, rest) = volList.partition(_.depart == i)
+      volList = rest
       last = bestWay(cache, takeWhile.iterator, last)
       cache.put(i, last)
     }
@@ -51,7 +51,7 @@ object Optimizer {
 
   def format(path:Path):String = {
     val template: String = "{\n" + "    \"gain\" : %d,\n" + "    \"path\" : %s\n" + "}"
-    val pathString: String = path.vols.map("\"" + _.name + "\"").mkString(",")
+    val pathString: String = path.vols.map("\"" + _.name + "\"").mkString(", ")
     template.format(path.gain, pathString)
   }
 }
