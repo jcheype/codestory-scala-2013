@@ -7,7 +7,7 @@ import enonce2.{Path, Optimizer, Vol}
 import org.scalatra._
 import scalate.ScalateSupport
 import org.slf4j.LoggerFactory
-import com.google.common.io.Files
+import com.google.common.io.{CharStreams, Files}
 import java.io.File
 import java.nio.charset.Charset
 import com.petebevin.markdown.MarkdownProcessor
@@ -15,10 +15,9 @@ import xml.Unparsed
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json._
 import com.fasterxml.jackson.databind.module.SimpleModule
-import org.apache.commons.lang.builder.{ToStringStyle, ToStringBuilder}
-import com.fasterxml.jackson.core.`type`.TypeReference
 import org.json4s.JsonAST.JValue
 import java.text.DecimalFormat
+import com.fasterxml.jackson.core.JsonParser
 
 class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJsonSupport {
   def logger = LoggerFactory.getLogger(classOf[CodeStoryServlet])
@@ -107,7 +106,16 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
   }
 
   post("/jajascript/optimize") {
-    val field: JValue = parsedBody.transformField {
+    contentType = formats("json")
+
+    val body: String = request.getParameterNames.nextElement()
+    logger.debug("BODY: "+body)
+
+    val jsValue = readJsonFromBody(body)
+
+    logger.debug("jsValue: "+jsValue)
+
+    val field: JValue = jsValue.transformField {
       case ("VOL", x) => ("name", x)
       case ("DEPART", x) => ("depart", x)
       case ("DUREE", x) => ("duree", x)
