@@ -55,7 +55,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     val q: String = params("q")
     queries.get(q) match {
       case Some(reply) => reply
-      case None => (""+Calc.calc(Calc.prepareString(q))).replaceAll(",",".")
+      case None => (""+Calc.calc(Calc.prepareString(q))).replaceAll("\\.",",")
     }
   }
 
