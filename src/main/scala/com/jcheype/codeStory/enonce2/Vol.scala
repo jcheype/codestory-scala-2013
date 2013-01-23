@@ -11,6 +11,3 @@ case class Vol(name:String, depart:Int, duree:Int, prix:Int) {
   def end: Int = { depart+duree}
 }
 
-object DepartOrdering extends Ordering[Vol] {
-  def compare(a:Vol, b:Vol) = a.depart compare b.depart
-}

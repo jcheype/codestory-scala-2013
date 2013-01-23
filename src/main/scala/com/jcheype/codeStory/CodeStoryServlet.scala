@@ -18,9 +18,11 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import org.apache.commons.lang.builder.{ToStringStyle, ToStringBuilder}
 import com.fasterxml.jackson.core.`type`.TypeReference
 import org.json4s.JsonAST.JValue
+import java.text.DecimalFormat
 
-class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJsonSupport{
+class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJsonSupport {
   def logger = LoggerFactory.getLogger(classOf[CodeStoryServlet])
+
   protected implicit val jsonFormats: Formats = DefaultFormats
 
   val module = new SimpleModule("CodeStory")
@@ -40,27 +42,38 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     "As tu bien recu le second enonce(OUI/NON)" -> "OUI",
     "As tu copie le code de ndeloof(OUI/NON/JE_SUIS_NICOLAS)" -> "NON")
 
-  before(){
-    logger.debug("REQUEST METHOD: " + request.getMethod )
-    logger.debug("REQUEST URI: " + request.getQueryString )
-    logger.debug("REQUEST PROTOCOL: " + request.getProtocol )
-    logger.debug("REQUEST HEAD: " + request.headers )
+  before() {
+    logger.debug("REQUEST METHOD: " + request.getMethod)
+    logger.debug("REQUEST URI: " + request.getQueryString)
+    logger.debug("REQUEST PROTOCOL: " + request.getProtocol)
+    logger.debug("REQUEST HEAD: " + request.headers)
   }
 
   get("/") {
-    <html><body>CodeStory 2013</body></html>
+    <html>
+      <body>CodeStory 2013</body>
+    </html>
   }
 
   get("/", params.contains("q")) {
     val q: String = params("q")
     queries.get(q) match {
       case Some(reply) => reply
-      case None => (""+Calc.calc(Calc.prepareString(q))).replaceAll("\\.",",")
+      case None =>
+        val calc: Number = Calc.calc(Calc.prepareString(q))
+        if (calc != null) {
+          val df = new DecimalFormat()
+          df.setParseIntegerOnly(true)
+          df.setGroupingUsed(false)
+          df.setMaximumIntegerDigits(200)
+          val format: String = df.format(calc)
+          format.replaceAll("\\.", ",")
+        }
     }
   }
 
   post("/enonce/:id") {
-    val id:Int = params.getOrElse("id", halt(400)).toInt
+    val id: Int = params.getOrElse("id", halt(400)).toInt
     logger.debug("Enonce: " + id)
     val file: File = new File("enonce" + id + ".md")
     logger.debug("Enonce: " + file.getAbsolutePath)
@@ -70,17 +83,21 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     Ok()
   }
 
-  get("/enonce/:id"){
-    val id:Int = params.getOrElse("id", halt(400)).toInt
-    val m:MarkdownProcessor = new MarkdownProcessor()
+  get("/enonce/:id") {
+    val id: Int = params.getOrElse("id", halt(400)).toInt
+    val m: MarkdownProcessor = new MarkdownProcessor()
     val file: File = new File("enonce" + id + ".md")
     val content = m.markdown(Files.toString(file, Charset.forName("UTF-8")))
-    <html><body>{Unparsed(content)}</body></html>
+    <html>
+      <body>
+        {Unparsed(content)}
+      </body>
+    </html>
   }
 
-  get("/scalaskel/change/:value"){
+  get("/scalaskel/change/:value") {
     contentType = formats("json")
-    val value:Int = params.getOrElse("value", halt(400)).toInt
+    val value: Int = params.getOrElse("value", halt(400)).toInt
     val result = Decomposer.decompositionMap.get(value)
 
     result match {
@@ -89,7 +106,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     }
   }
 
-  post("/jajascript/optimize"){
+  post("/jajascript/optimize") {
     val field: JValue = parsedBody.transformField {
       case ("VOL", x) => ("name", x)
       case ("DEPART", x) => ("depart", x)
@@ -109,9 +126,10 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     // remove content type in case it was set through an action
     contentType = null
     // Try to render a ScalateTemplate if no route matched
-    findTemplate(requestPath) map { path =>
-      contentType = "text/html"
-      layoutTemplate(path)
+    findTemplate(requestPath) map {
+      path =>
+        contentType = "text/html"
+        layoutTemplate(path)
     } orElse serveStaticResource() getOrElse resourceNotFound()
   }
 }
