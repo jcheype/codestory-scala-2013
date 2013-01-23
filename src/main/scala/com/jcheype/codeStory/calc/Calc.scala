@@ -1,6 +1,6 @@
 package com.jcheype.codeStory.calc
 
-import org.mvel2.MVEL
+import javax.script.{ScriptEngine, ScriptEngineManager}
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,13 +10,16 @@ import org.mvel2.MVEL
  * To change this template use File | Settings | File Templates.
  */
 object Calc {
+  private[simpleCalc] var factory: ScriptEngineManager = new ScriptEngineManager
+  private[simpleCalc] var engine: ScriptEngine = factory.getEngineByName("groovy")
+
 
   def prepareString(s: String): String  = {
     s.replace(' ', '+').replace(',', '.')
   }
 
   def calc(s: String): Number = {
-    val value = MVEL.eval(s)
+    val value = engine.eval(s)
     value.asInstanceOf[Number]
   }
 }
