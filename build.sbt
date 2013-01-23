@@ -27,6 +27,8 @@ libraryDependencies += "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4"
 
 libraryDependencies += "org.mvel" % "mvel2" % "2.1.3.Final"
 
+libraryDependencies += "commons-lang" % "commons-lang" % "2.6"
+
 
 
 port in container.Configuration := 8081

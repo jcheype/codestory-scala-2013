@@ -1,5 +1,6 @@
 package com.jcheype.codeStory
 
+import com.jcheype.codeStory.calc.Calc
 import enonce1.Decomposer.FooBar
 import enonce1.{FooBarSerializer, Decomposer}
 import org.scalatra._
@@ -13,7 +14,8 @@ import xml.Unparsed
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json._
 import com.fasterxml.jackson.databind.module.SimpleModule
-import org.mvel2.MVEL._
+import com.google.common.base.Objects
+import org.apache.commons.lang.builder.{ToStringStyle, ToStringBuilder}
 
 class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJsonSupport{
   def logger = LoggerFactory.getLogger(classOf[CodeStoryServlet])
@@ -35,20 +37,19 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     "As tu bien recu le second enonce(OUI/NON)" -> "OUI",
     "As tu copie le code de ndeloof(OUI/NON/JE_SUIS_NICOLAS)" -> "NON")
 
+  before(){
+    logger.debug("REQUEST: " + ToStringBuilder.reflectionToString(request, ToStringStyle.MULTI_LINE_STYLE) )
+  }
 
   get("/") {
     <html><body>CodeStory 2013</body></html>
   }
 
-//  def calc(s: String): Int = {
-//    Integer result = (Double) eval(s);
-//  }
-
   get("/", params.contains("q")) {
     val q: String = params("q")
     queries.get(q) match {
       case Some(reply) => reply
-      case None => calc(q)
+      case None => ""+Calc.calc(Calc.prepareString(q))
     }
   }
 
