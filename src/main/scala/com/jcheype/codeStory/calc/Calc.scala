@@ -19,7 +19,7 @@ object Calc {
   }
 
   def calc(s: String): Number = {
-    val value = engine.eval(s)
+    val value = engine.eval(s.replaceAll("[a-zA-Z]", ""))
     value.asInstanceOf[Number]
   }
 }
