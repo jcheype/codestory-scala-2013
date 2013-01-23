@@ -31,7 +31,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     "Quelle est ton adresse email" -> "cheype@gmail.com",
     "Es tu heureux de participer(OUI/NON)" -> "OUI",
     "Es tu abonne a la mailing list(OUI/NON)" -> "OUI",
-    "Es tu pret a recevoir une enonce1 au format markdown par http post(OUI/NON)" -> "OUI",
+    "Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)" -> "OUI",
     "Est ce que tu reponds toujours oui(OUI/NON)" -> "NON",
     "As tu bien recu le premier enonce(OUI/NON)" -> "OUI",
     "((1,1 2) 3,14 4 (5 6 7) (8 9 10)*4267387833344334647677634)/2*553344300034334349999000" -> "31878018903828899277492024491376690701584023926880",
