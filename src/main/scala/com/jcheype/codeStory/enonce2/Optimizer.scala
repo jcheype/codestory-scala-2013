@@ -14,15 +14,15 @@ object Optimizer {
   def logger = LoggerFactory.getLogger(Optimizer.getClass)
 
 
-  val emptyPath = new Path(Set[Vol]())
+  val emptyPath = new Path(Set[Vol](), 0)
 
   def bestWay(cache: mutable.Map[Int, Path], it:Iterator[Vol], last:Path = emptyPath): Path = {
     if (!it.hasNext)
       return last
     val vol = it.next()
 
-    val path = cache.get(vol.end).getOrElse(new Path(Set[Vol]()))
-    val newPath = new Path(Set(vol) ++ path.vols)
+    val path = cache.get(vol.end).getOrElse(emptyPath)
+    val newPath = new Path(Set(vol) ++ path.vols, path.gain + vol.prix)
 
 
     if (newPath.gain > last.gain)

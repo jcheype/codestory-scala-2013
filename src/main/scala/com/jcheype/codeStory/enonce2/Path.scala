@@ -7,8 +7,7 @@ package com.jcheype.codeStory.enonce2
  * Time: 22:31
  * To change this template use File | Settings | File Templates.
  */
-class Path(var vols:Set[Vol]) {
-  var gain: Int=vols.aggregate(0)((x, vol) => x + vol.prix, _ + _)
+class Path(val vols:Set[Vol], val gain:Int) {
 
   override def toString(): String = {
     vols.toString()
