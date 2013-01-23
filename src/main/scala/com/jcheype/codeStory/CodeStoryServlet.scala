@@ -109,11 +109,8 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     contentType = formats("json")
 
     val body: String = request.getParameterNames.nextElement()
-    logger.debug("BODY: "+body)
 
     val jsValue = readJsonFromBody(body)
-
-    logger.debug("jsValue: "+jsValue)
 
     val field: JValue = jsValue.transformField {
       case ("VOL", x) => ("name", x)
