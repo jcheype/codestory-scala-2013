@@ -62,7 +62,8 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
     logger.debug("Enonce: " + file.getAbsolutePath)
     Files.write(request.body, file, Charset.forName("UTF-8"))
 
-    Ok(201)
+    status = 201
+    Ok()
   }
 
   get("/enonce/:id"){
@@ -95,6 +96,8 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
 
     val vols: List[Vol] = field.extract[List[Vol]]
     val optimize: Path = Optimizer.optimize(vols.toSet)
+
+    status = 201
     Optimizer.format(optimize)
   }
 
