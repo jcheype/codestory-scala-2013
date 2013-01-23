@@ -3,6 +3,7 @@ package com.jcheype.codeStory
 import com.jcheype.codeStory.calc.Calc
 import enonce1.Decomposer.FooBar
 import enonce1.{FooBarSerializer, Decomposer}
+import enonce2.{Path, Optimizer, Vol}
 import org.scalatra._
 import scalate.ScalateSupport
 import org.slf4j.LoggerFactory
@@ -14,8 +15,9 @@ import xml.Unparsed
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json._
 import com.fasterxml.jackson.databind.module.SimpleModule
-import com.google.common.base.Objects
 import org.apache.commons.lang.builder.{ToStringStyle, ToStringBuilder}
+import com.fasterxml.jackson.core.`type`.TypeReference
+import org.json4s.JsonAST.JValue
 
 class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJsonSupport{
   def logger = LoggerFactory.getLogger(classOf[CodeStoryServlet])
@@ -80,6 +82,20 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
       case Some(fooBarSet) => mapper.writeValueAsString(fooBarSet.toArray)
       case None => 400
     }
+  }
+
+  post("/jajascript/optimize"){
+    val field: JValue = parsedBody.transformField {
+      case ("VOL", x) => ("name", x)
+      case ("DEPART", x) => ("depart", x)
+      case ("DUREE", x) => ("duree", x)
+      case ("PRIX", x) => ("prix", x)
+    }
+
+
+    val vols: List[Vol] = field.extract[List[Vol]]
+    val optimize: Path = Optimizer.optimize(vols.toSet)
+    Optimizer.format(optimize)
   }
 
   notFound {

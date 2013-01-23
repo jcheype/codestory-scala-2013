@@ -1,7 +1,5 @@
 package com.jcheype.codeStory.enonce2
 
-import tools.nsc.io.Path
-
 /**
  * Created with IntelliJ IDEA.
  * User: juliencheype
