@@ -29,7 +29,7 @@ libraryDependencies += "org.mvel" % "mvel2" % "2.1.3.Final"
 
 libraryDependencies += "commons-lang" % "commons-lang" % "2.6"
 
-libraryDependencies += "org.codehaus.groovy" % "groovy" % "2.0.6"
+libraryDependencies += "org.codehaus.groovy" % "groovy" % "1.8.4"
 
 
 port in container.Configuration := 8081
