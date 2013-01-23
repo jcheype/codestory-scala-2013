@@ -42,7 +42,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
 
   before(){
     logger.debug("REQUEST METHOD: " + request.getMethod )
-    logger.debug("REQUEST URI: " + request.uri )
+    logger.debug("REQUEST URI: " + request.getQueryString )
     logger.debug("REQUEST PROTOCOL: " + request.getProtocol )
     logger.debug("REQUEST HEAD: " + request.headers )
   }
