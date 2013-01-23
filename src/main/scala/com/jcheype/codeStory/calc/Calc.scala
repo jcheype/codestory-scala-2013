@@ -10,8 +10,8 @@ import javax.script.{ScriptEngine, ScriptEngineManager}
  * To change this template use File | Settings | File Templates.
  */
 object Calc {
-  private[simpleCalc] var factory: ScriptEngineManager = new ScriptEngineManager
-  private[simpleCalc] var engine: ScriptEngine = factory.getEngineByName("groovy")
+  val factory: ScriptEngineManager = new ScriptEngineManager
+  val engine: ScriptEngine = factory.getEngineByName("groovy")
 
 
   def prepareString(s: String): String  = {
