@@ -21,14 +21,6 @@ class CodeStorySpecs extends Specification {
   val rand = new Random()
   val codeStory = new CodeStoryServlet()
 
-  "1+1 should return 2" in {
-    Calc.calc("1+1") must be equalTo(2)
-  }
-
-  "(2*3)/4 should return 1.5" in {
-    Calc.calc("(2*3)/4") must be equalTo((2F*3)/4)
-  }
-
 //  "bla1 " in {
 //    val vols: Set[Vol] = Set(
 //      Vol("MONAD42",  0, 5, 10),
@@ -47,7 +39,7 @@ class CodeStorySpecs extends Specification {
     val vols: Set[Vol] = randVol(50000)
     val optimize: Path = Optimizer.optimize(vols)
     logger.debug("SET: " + vols)
-    logger.debug("PATH: " + optimize)
+    logger.debug("PATH: " + Optimizer.format(optimize))
   }
 
 

@@ -50,7 +50,7 @@ object Optimizer {
   }
 
   def format(path:Path):String = {
-    val template: String = "{\n" + "    \"gain\" : %d,\n" + "    \"path\" : %s\n" + "}"
+    val template: String = "{\n" + "    \"gain\" : %d,\n" + "    \"path\" : [%s]\n" + "}"
     val pathString: String = path.vols.map("\"" + _.name + "\"").mkString(", ")
     template.format(path.gain, pathString)
   }
