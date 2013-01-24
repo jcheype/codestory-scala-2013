@@ -33,4 +33,3 @@ libraryDependencies += "org.codehaus.groovy" % "groovy" % "1.8.4"
 
 
 port in container.Configuration := 8081
-org.mortbay.jetty.Request.maxFormContentSize
