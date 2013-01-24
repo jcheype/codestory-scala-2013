@@ -37,9 +37,11 @@ class CodeStorySpecs extends Specification {
 
   "bla " in {
     val vols: Set[Vol] = randVol(50000)
+    val start = System.currentTimeMillis()
     val optimize: Path = Optimizer.optimize(vols)
     logger.debug("SET: " + vols)
     logger.debug("PATH: " + Optimizer.format(optimize))
+    logger.debug("duration: " + (System.currentTimeMillis() - start))
   }
 
 
@@ -48,9 +50,9 @@ class CodeStorySpecs extends Specification {
     for (i <- 0 to size){
       val vol = new Vol(
         UUID.randomUUID().toString,
+        rand.nextInt(1000),
         rand.nextInt(10),
-        rand.nextInt(10),
-        rand.nextInt(10)
+        rand.nextInt(100)
       )
       result.add(vol)
     }

@@ -16,37 +16,44 @@ object Optimizer {
 
   val emptyPath = new Path(Set[Vol](), 0)
 
-  def bestWay(cache: mutable.Map[Int, Path], it:Iterator[Vol], last:Path = emptyPath): Path = {
-    if (!it.hasNext)
-      return last
-    val vol = it.next()
-
-    val path = cache.get(vol.end).getOrElse(emptyPath)
-    val newPath = new Path(Set(vol) ++ path.vols, path.gain + vol.prix)
 
 
-    if (newPath.gain > last.gain)
-      bestWay(cache, it, newPath)
-    else
-      bestWay(cache, it, last)
+
+//  def length[A](list: List[A]): Int = list match {
+//    case Nil => 0
+//    case _ :: tail => 1 + length(tail)
+//  }
+
+  def bestWay(idx:Int, cache: mutable.Map[Int, Path], volList:List[Vol], last:Path = emptyPath): Path = {
+    volList match {
+      case Nil => last
+
+      case vol :: tail =>
+        if (vol.depart != idx){
+          cache.put(idx, last)
+          return bestWay(idx-1, cache, volList, last)
+        }
+
+        val path = cache.get(vol.end).getOrElse(emptyPath)
+        val newPath = new Path(Set(vol) ++ path.vols, path.gain + vol.prix)
+        if (newPath.gain > last.gain)
+          bestWay(idx, cache, tail, newPath)
+        else
+          bestWay(idx, cache, tail, last)
+
+    }
   }
 
   def optimize(vols: Set[Vol]): Path = {
     val cache: mutable.Map[Int, Path] = new mutable.HashMap[Int, Path]()
 
-    var volList: List[Vol] = vols.toList.sortWith(_.depart > _.depart)
+    val volList: List[Vol] = vols.toList.sortWith(_.depart > _.depart)
 
     val maxTime = volList.head.depart
     var last = emptyPath
 
-    for (i <- maxTime to 0 by -1) {
-      val (takeWhile, rest) = volList.partition(_.depart == i)
-      volList = rest
-      last = bestWay(cache, takeWhile.iterator, last)
-      cache.put(i, last)
-    }
+    bestWay(maxTime, cache, volList, last)
 
-    last
   }
 
   def format(path:Path):String = {
