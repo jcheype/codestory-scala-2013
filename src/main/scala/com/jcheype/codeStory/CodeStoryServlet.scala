@@ -121,7 +121,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
 
 
     val vols: List[Vol] = field.extract[List[Vol]]
-    val optimize: Path = Optimizer.optimize(vols.toSet)
+    val optimize: Path = Optimizer.optimize(vols)
 
     status = 201
     Optimizer.format(optimize)

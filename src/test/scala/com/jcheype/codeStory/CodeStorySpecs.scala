@@ -1,6 +1,5 @@
 package com.jcheype.codeStory
 
-import com.jcheype.codeStory.calc.Calc
 import enonce2.{Path, Optimizer, Vol}
 import org.specs2.mutable.Specification
 import collection.mutable
@@ -36,7 +35,7 @@ class CodeStorySpecs extends Specification {
 //  }
 
   "bla " in {
-    val vols: Set[Vol] = randVol(50000)
+    val vols: List[Vol] = randVol(50000)
     val start = System.currentTimeMillis()
     val optimize: Path = Optimizer.optimize(vols)
     logger.debug("SET: " + vols)
@@ -45,7 +44,7 @@ class CodeStorySpecs extends Specification {
   }
 
 
-  def randVol(size:Int): Set[Vol] = {
+  def randVol(size:Int): List[Vol] = {
     val result = new mutable.HashSet[Vol]()
     for (i <- 0 to size){
       val vol = new Vol(
@@ -57,6 +56,6 @@ class CodeStorySpecs extends Specification {
       result.add(vol)
     }
 
-    result.toSet
+    result.toList
   }
 }

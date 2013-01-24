@@ -7,7 +7,7 @@ package com.jcheype.codeStory.enonce2
  * Time: 22:31
  * To change this template use File | Settings | File Templates.
  */
-class Path(val vols:Set[Vol], val gain:Int) {
+class Path(val vols:List[Vol], val gain:Int) {
 
   override def toString(): String = {
     vols.toString()
