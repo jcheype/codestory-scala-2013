@@ -30,6 +30,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
 
   val queries = Map(
     "Quelle est ton adresse email" -> "cheype@gmail.com",
+    "Souhaites-tu-participer-a-la-suite-de-Code-Story(OUI/NON)" -> "OUI",
     "Es tu heureux de participer(OUI/NON)" -> "OUI",
     "Es tu abonne a la mailing list(OUI/NON)" -> "OUI",
     "Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)" -> "OUI",
