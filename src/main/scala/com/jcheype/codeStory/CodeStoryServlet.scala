@@ -7,7 +7,7 @@ import enonce2.{Path, Optimizer, Vol}
 import org.scalatra._
 import scalate.ScalateSupport
 import org.slf4j.LoggerFactory
-import com.google.common.io.{CharStreams, Files}
+import com.google.common.io.Files
 import java.io.File
 import java.nio.charset.Charset
 import com.petebevin.markdown.MarkdownProcessor
@@ -17,7 +17,6 @@ import org.scalatra.json._
 import com.fasterxml.jackson.databind.module.SimpleModule
 import org.json4s.JsonAST.JValue
 import java.text.DecimalFormat
-import com.fasterxml.jackson.core.JsonParser
 
 class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJsonSupport {
   def logger = LoggerFactory.getLogger(classOf[CodeStoryServlet])
