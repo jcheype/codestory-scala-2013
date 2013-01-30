@@ -43,7 +43,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
 
   before() {
     logger.debug("REQUEST METHOD: " + request.getMethod)
-    logger.debug("REQUEST URI: " + request.getQueryString)
+    logger.debug("REQUEST URI: " + request.getRequestURI + request.getQueryString)
     logger.debug("REQUEST PROTOCOL: " + request.getProtocol)
     logger.debug("REQUEST HEAD: " + request.headers)
   }
@@ -108,7 +108,7 @@ class CodeStoryServlet extends ScalatraServlet with ScalateSupport with JacksonJ
   post("/jajascript/optimize") {
     contentType = formats("json")
 
-    val body: String = request.getParameterNames.nextElement()
+    val body:String = request.getParameterNames.nextElement().toString
 
     val jsValue = readJsonFromBody(body)
 
